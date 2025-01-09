@@ -18,7 +18,7 @@ phases:
       - mvn test -Dtest=com.example.AdditionTest,com.example.MultiplicationAndDivisionTest
       - |
         codebuild-tests-run \
-          --test-command 'mvn test -Dtest=$(echo "$CODEBUILD_CURRENT_SHARD_FILES" | sed "s|src/test/java/||g; s/\.java//g; s|/|.|g; s/ /,/g" | tr '\n' ',' | sed 's/,$//')' \
+          --test-command 'mvn test -Dtest=$(echo "$CODEBUILD_CURRENT_SHARD_FILES" | sed "s|src/test/java/||g; s/\.java//g; s|/|.|g; s/ /,/g" | tr "\n" "," | sed "s/,$//")' \
           --files-search "codebuild-glob-search '**/test/**/*.java'"
          
   post_build:
