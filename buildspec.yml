@@ -13,9 +13,11 @@ phases:
   build:
     commands:
       - echo "Running codebuild-tests-run command without using CODEBUILD_CURRENT_SHARD_FILES"
+      - mvn test -Dtest="src/test/java/com/example/AdditionTest.java"
+      - mvn test -Dtest="com.example.AdditionTest.java"
       - |
         codebuild-tests-run \
-          --test-command 'mvn test -Dtest=$(echo "$CODEBUILD_CURRENT_SHARD_FILES" | tr "\n" " ")' \
+          --test-command 'mvn test -Dtest=$(echo "$CODEBUILD_CURRENT_SHARD_FILES" | -mvtr "\n" " ")' \
           --files-search "codebuild-glob-search '**/test/**/*.java'"
          
   post_build:
