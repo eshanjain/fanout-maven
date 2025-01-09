@@ -3,23 +3,22 @@ version: 0.2
 batch:
   fast-fail: false 
   build-fanout:
-    parallelism: 1
+    parallelism: 2
     ignore-failure: false
     
 phases:
-  install:
-    commands:
-      - npm install jest-junit --save-dev
   pre_build:
     commands:
       - echo 'prebuild'
   build:
     commands:
       - echo "Running codebuild-tests-run command without using CODEBUILD_CURRENT_SHARD_FILES"
-      -  mvn test
+      - |
+        codebuild-tests-run \
+          --test-command 'mvn test -Dtest=$(echo "$CODEBUILD_CURRENT_SHARD_FILES" | tr "\n" " ")' \
+          --files-search "codebuild-glob-search '**/test/**/*.java'"
          
   post_build:
     commands:
-      - codebuild-glob-search '**/*.xml'  
       - echo "Running post-build steps..."
       - echo "Build completed on `date`"
